@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SkyPulse — Real-Time Weather</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet" />
+</head>
+<body class="sky-cold">
+
+  <div class="sky-bg">
+    <div class="aurora aurora-1"></div>
+    <div class="aurora aurora-2"></div>
+    <div class="aurora aurora-3"></div>
+    <div class="stars" id="stars"></div>
+  </div>
+
+  <div class="app-wrapper">
+
+    <header class="app-header">
+      <div class="logo">
+        <span class="logo-icon">🌐</span>
+        <span class="logo-text">SkyPulse</span>
+      </div>
+      <p class="tagline">Real-time weather — any city, any village, anywhere in India</p>
+    </header>
+
+    <section class="search-section">
+      <div class="search-box">
+        <span class="search-icon">🔍</span>
+        <input
+          type="text"
+          id="cityInput"
+          class="search-input"
+          placeholder="Enter any city or town... (e.g. Jamshedpur, Bokaro, Ranchi, Patna)"
+          autocomplete="off"
+        />
+        <button id="searchBtn" class="search-btn">
+          <span class="btn-text">Search</span>
+          <span class="btn-icon">→</span>
+        </button>
+      </div>
+
+      <div class="location-row">
+        <button id="locationBtn" class="location-btn">
+          📍 My Location
+        </button>
+        <span class="location-hint">Or pick a city below</span>
+      </div>
+
+      <div class="quick-cities">
+        <span class="quick-label">Quick:</span>
+        <button class="quick-btn" data-city="Jamshedpur">Jamshedpur</button>
+        <button class="quick-btn" data-city="Ranchi">Ranchi</button>
+        <button class="quick-btn" data-city="Bokaro">Bokaro</button>
+        <button class="quick-btn" data-city="Dhanbad">Dhanbad</button>
+        <button class="quick-btn" data-city="Patna">Patna</button>
+        <button class="quick-btn" data-city="Delhi">Delhi</button>
+        <button class="quick-btn" data-city="Mumbai">Mumbai</button>
+        <button class="quick-btn" data-city="Kolkata">Kolkata</button>
+        <button class="quick-btn" data-city="Chennai">Chennai</button>
+        <button class="quick-btn" data-city="Bangalore">Bangalore</button>
+        <button class="quick-btn" data-city="Hyderabad">Hyderabad</button>
+        <button class="quick-btn" data-city="Ahmedabad">Ahmedabad</button>
+      </div>
+    </section>
+
+    <div class="search-tips">
+      <span class="tip-icon">💡</span>
+      <span>
+        <strong>Tip:</strong> Search any town or city across India — Seraikela, Chaibasa, Godda, Dumka, Gumla and more. If a small village isn't found, try the nearest town.
+      </span>
+    </div>
+
+    <div class="error-banner" id="errorBanner">
+      <span class="error-icon">⚠️</span>
+      <span id="errorText">City not found. Please try again.</span>
+    </div>
+
+    <div class="loading-state" id="loadingState">
+      <div class="loader-ring"></div>
+      <p id="loadingText">Fetching weather data...</p>
+    </div>
+
+    <section class="weather-card" id="weatherCard">
+
+      <div class="card-header">
+        <div class="location-info">
+          <h1 class="city-name" id="cityName">—</h1>
+          <p class="country-name" id="countryName">—</p>
+        </div>
+        <div class="date-time">
+          <p class="current-date" id="currentDate">—</p>
+          <p class="current-time" id="currentTime">—</p>
+        </div>
+      </div>
+
+      <div class="temp-hero">
+        <div class="weather-icon-large" id="weatherIconLarge">☁️</div>
+        <div class="temp-display">
+          <span class="temp-value" id="tempValue">--</span>
+          <div class="temp-unit-toggle">
+            <button class="unit-btn active" id="celsiusBtn">°C</button>
+            <button class="unit-btn" id="fahrenheitBtn">°F</button>
+          </div>
+        </div>
+        <div class="feels-like">
+          <span>Feels like </span>
+          <span id="feelsLike">--</span>
+        </div>
+        <p class="weather-description" id="weatherDesc">—</p>
+      </div>
+
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon">💧</div>
+          <div class="stat-label">Humidity</div>
+          <div class="stat-value" id="humidity">--%</div>
+          <div class="stat-bar">
+            <div class="stat-bar-fill" id="humidityBar" style="width:0%"></div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">💨</div>
+          <div class="stat-label">Wind Speed</div>
+          <div class="stat-value" id="windSpeed">-- km/h</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">🌡️</div>
+          <div class="stat-label">Pressure</div>
+          <div class="stat-value" id="pressure">-- hPa</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">👁️</div>
+          <div class="stat-label">Visibility</div>
+          <div class="stat-value" id="visibility">-- km</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">🌅</div>
+          <div class="stat-label">Sunrise</div>
+          <div class="stat-value" id="sunrise">--:--</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">🌇</div>
+          <div class="stat-label">Sunset</div>
+          <div class="stat-value" id="sunset">--:--</div>
+        </div>
+      </div>
+
+      <div class="minmax-bar">
+        <div class="minmax-item">
+          <span class="minmax-label">↓ Min</span>
+          <span class="minmax-val" id="tempMin">--°</span>
+        </div>
+        <div class="minmax-track">
+          <div class="minmax-indicator" id="minmaxIndicator"></div>
+        </div>
+        <div class="minmax-item">
+          <span class="minmax-label">↑ Max</span>
+          <span class="minmax-val" id="tempMax">--°</span>
+        </div>
+      </div>
+
+    </section>
+
+    <section class="empty-state" id="emptyState">
+      <div class="empty-illustration">🌤️</div>
+      <h2>Search weather anywhere in India</h2>
+      <p>Type any city, town, or district name above to get real-time weather. Or tap <strong>My Location</strong> to auto-detect.</p>
+    </section>
+
+    <footer class="app-footer">
+      <p>Powered by <a href="https://openweathermap.org" target="_blank">OpenWeatherMap API</a> · Built with ❤️ by SkyPulse</p>
+    </footer>
+
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
